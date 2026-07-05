@@ -25,6 +25,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
+    env:
+      ORANGEHRM_USERNAME: ${{ secrets.ORANGEHRM_USERNAME }}
+      ORANGEHRM_PASSWORD: ${{ secrets.ORANGEHRM_PASSWORD }}
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
