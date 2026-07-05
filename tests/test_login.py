@@ -19,7 +19,7 @@ class TestLogin:
     def test_invalid_username(self, page: Page):
         login_page = LoginPage(page)
         login_page.login(login_data.INVALID_USERNAME, login_data.PASSWORD)
-        expect(login_page.login_error).to_have_text('invalid credentials')
+        expect(login_page.login_error).to_have_text('Invalid credentials')
 
     @allure.feature("Login")
     @allure.title("Verify login fails with invalid password")
