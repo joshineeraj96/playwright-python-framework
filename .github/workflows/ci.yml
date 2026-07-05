@@ -1,0 +1,75 @@
+name: CI Pipeline
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+  push:
+    branches:
+      - main
+      - develop
+      - bug_fix
+      - release/*
+
+  workflow_dispatch:
+
+jobs:
+  ui-tests:
+    name: UI Test Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Verify Python Version
+        run: python --version
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Verify Pytest Installation
+        run: pytest --version
+
+      - name: Install Playwright Browsers
+        run: playwright install --with-deps
+
+      - name: Verify Playwright Installation
+        run: playwright --version
+
+      - name: Run Tests
+        run: pytest --alluredir=artifacts/allure-results
+
+      - name: Upload Allure Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: artifacts/allure-results
+          if-no-files-found: ignore
+
+      - name: Upload Screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: artifacts/screenshots
+          if-no-files-found: ignore
+
+      - name: Upload Traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: traces
+          path: artifacts/traces
+          if-no-files-found: ignore
