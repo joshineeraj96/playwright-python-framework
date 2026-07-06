@@ -1,4 +1,6 @@
+import json
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -12,7 +14,7 @@ if USERNAME is None or PASSWORD is None:
         "Configure them using a local .env file or GitHub Actions Secrets."
     )
 
-INVALID_USERNAME = "abcde"
-INVALID_PASSWORD = "abc@123"
-BLANK_USERNAME = "  "
-BLANK_PASSWORD = "  "
+json_file = Path(__file__).parent / "login_data.json"
+
+with open(json_file, encoding="utf-8") as file:
+    INVALID_LOGIN_DATA = json.load(file)["invalid_login_data"]

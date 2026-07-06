@@ -3,9 +3,12 @@ from pages.login_page import LoginPage
 from pages.dashboard_page import DashboardPage
 from test_data import login_data
 import allure
+import pytest
 
 class TestDashboard:
 
+    @pytest.mark.sanity
+    @pytest.mark.regression
     @allure.feature("Dashboard")
     @allure.title("Verify user can logout successfully")
     def test_logout(self, page: Page):

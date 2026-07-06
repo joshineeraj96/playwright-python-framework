@@ -4,9 +4,11 @@ from pages.dashboard_page import DashboardPage
 from pages.admin_page import AdminPage
 from test_data import login_data
 import allure
+import pytest
 
 class TestAdmin:
 
+    @pytest.mark.regression
     @allure.feature("Admin")
     @allure.title("Verify user can navigate to Admin page")
     def test_navigate_to_admin(self, page: Page):

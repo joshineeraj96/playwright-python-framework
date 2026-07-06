@@ -1,0 +1,14 @@
+{
+    "invalid_login_data": [
+        {
+            "username": "abcde",
+            "password": "admin123",
+            "id": "Invalid Username"
+        },
+        {
+            "username": "Admin",
+            "password": "abc@123",
+            "id": "Invalid Password"
+        }
+    ]
+}
