@@ -18,6 +18,9 @@ on:
 
 env:
   PYTHON_VERSION: "3.12"
+  ALLURE_VERSION: "2.44.0"
+  ORANGEHRM_USERNAME: ${{ secrets.ORANGEHRM_USERNAME }}
+  ORANGEHRM_PASSWORD: ${{ secrets.ORANGEHRM_PASSWORD }}
 
 jobs:
 
@@ -25,10 +28,6 @@ jobs:
     name: Test Environment Setup
     runs-on: ubuntu-latest
     timeout-minutes: 10
-
-    env:
-      ORANGEHRM_USERNAME: ${{ secrets.ORANGEHRM_USERNAME }}
-      ORANGEHRM_PASSWORD: ${{ secrets.ORANGEHRM_PASSWORD }}
 
     steps:
       - name: Checkout Repository
@@ -57,62 +56,36 @@ jobs:
 
       - name: Install Allure CLI
         run: |
-          wget https://github.com/allure-framework/allure2/releases/latest/download/allure-2.34.1.tgz
-          tar -zxvf allure-2.34.1.tgz
-          sudo mv allure-2.34.1 /opt/allure
+          wget https://github.com/allure-framework/allure2/releases/download/${{ env.ALLURE_VERSION }}/allure-${{ env.ALLURE_VERSION }}.tgz
+          tar -zxvf allure-${{ env.ALLURE_VERSION }}.tgz
+          sudo mv allure-${{ env.ALLURE_VERSION }} /opt/allure
           sudo ln -s /opt/allure/bin/allure /usr/bin/allure
 
       - name: Verify Allure
         run: allure --version
 
-  collect-tests:
-    name: Collect Tests
-    if: github.event_name == 'pull_request'
-    needs: test-environment-setup
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-
-    env:
-      ORANGEHRM_USERNAME: ${{ secrets.ORANGEHRM_USERNAME }}
-      ORANGEHRM_PASSWORD: ${{ secrets.ORANGEHRM_PASSWORD }}
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          cache: pip
-
-      - run: pip install -r requirements.txt
-      - run: playwright install --with-deps
-
-      - name: Collect Tests
-        run: pytest --collect-only
-
   execute-ui-tests:
     name: Execute UI Tests
-    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
-    needs:
-      - test-environment-setup
-      - collect-tests
+    if: github.event_name == 'pull_request' || github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    needs: test-environment-setup
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
-    env:
-      ORANGEHRM_USERNAME: ${{ secrets.ORANGEHRM_USERNAME }}
-      ORANGEHRM_PASSWORD: ${{ secrets.ORANGEHRM_PASSWORD }}
-
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: pip
 
-      - run: pip install -r requirements.txt
-      - run: playwright install --with-deps
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install Playwright Browsers
+        run: playwright install --with-deps
 
       - name: Execute Tests
         run: pytest --alluredir=artifacts/allure-results
@@ -149,18 +122,20 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - uses: actions/download-artifact@v4
+      - name: Download Allure Results
+        uses: actions/download-artifact@v4
         with:
           name: allure-results
           path: artifacts/allure-results
 
       - name: Install Allure CLI
         run: |
-          wget https://github.com/allure-framework/allure2/releases/latest/download/allure-2.34.1.tgz
-          tar -zxvf allure-2.34.1.tgz
-          sudo mv allure-2.34.1 /opt/allure
+          wget https://github.com/allure-framework/allure2/releases/download/${{ env.ALLURE_VERSION }}/allure-${{ env.ALLURE_VERSION }}.tgz
+          tar -zxvf allure-${{ env.ALLURE_VERSION }}.tgz
+          sudo mv allure-${{ env.ALLURE_VERSION }} /opt/allure
           sudo ln -s /opt/allure/bin/allure /usr/bin/allure
 
       - name: Generate Allure Report
