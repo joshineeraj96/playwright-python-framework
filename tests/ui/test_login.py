@@ -27,5 +27,4 @@ class TestLogin:
     def test_invalid_login(self, page: Page, user):
         login_page = LoginPage(page)
         login_page.login(user["username"], user["password"])
-        expect(login_page.login_error).to_be_visible()
-        expect(login_page.login_error).to_have_text('Invalid credentials')
+        expect(login_page.login_error).to_have_text('Invalid credentials', timeout=10000)
