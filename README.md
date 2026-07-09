@@ -277,4 +277,4 @@ This project is licensed under the MIT License.
 
 Senior Automation Test Engineer
 
-Python | Playwright | API Automation | AI Testing Enthusiast
+Python | Playwright | API Automation | AI Testing
