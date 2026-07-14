@@ -1,20 +1,29 @@
 import pytest
+import allure
+
 from core.browser_manager import BrowserManager
 from config import config
 from utils.logger import configure_logger, get_logger
 from utils.screenshot import take_screenshot
 from pathlib import Path
 from utils.file_manager import clean_directory
-import allure
 from utils.file_naming import unique_name
 
 configure_logger()
 logger = get_logger(__name__)
 
 
+pytest_plugins = [
+    "tests.fixtures.auth_fixture",
+    "tests.fixtures.booking_fixture",
+    "tests.fixtures.mock_api_fixture",
+]
+
+
 def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="chromium")
     parser.addoption("--headed", action="store_true")
+
 
 @pytest.fixture(scope="session")
 def browser(request):
@@ -23,15 +32,34 @@ def browser(request):
 
     playwright, browser = BrowserManager.launch_browser(browser_name, headless=not is_headed)
    
-    yield browser
-    logger.info("Closing Browser")
+    yield browser, playwright
 
+    logger.info("Closing Browser")
     browser.close()
+
+    logger.info("Stopping Playwright")
     playwright.stop()
+
+
+@pytest.fixture(scope="session")
+def api_context(browser):
+
+    _, playwright = browser
+
+    logger.info("Creating API Request Context")
+
+    request_context = playwright.request.new_context(base_url=config.API_BASE_URL)
+
+    yield request_context
+
+    logger.info("Disposing API Request Context")
+    request_context.dispose()
+
 
 @pytest.fixture(scope="function")
 def context(request, browser):
-    context = browser.new_context(no_viewport=True)
+    browser_instance, _ = browser
+    context = browser_instance.new_context(no_viewport=True)
 
     # start tracing
     context.tracing.start(
@@ -65,6 +93,7 @@ def context(request, browser):
 
     context.close()
 
+
 @pytest.fixture(scope="function")
 def page(request, context):
     page = context.new_page()
@@ -82,12 +111,13 @@ def page(request, context):
 
     page.close()
 
+
 def pytest_runtest_logstart(nodeid, location):
     logger.info("=" * 80)
     logger.info(f"STARTING TEST: {nodeid}")
     logger.info("=" * 80)
 
-# 
+
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     outcome = yield
@@ -111,6 +141,7 @@ def pytest_runtest_makereport(item, call):
             )
 
             logger.error(f"Screenshot captured: {item.name}.png")
+
 
 def pytest_sessionstart(session):
     clean_directory("artifacts/screenshots")
