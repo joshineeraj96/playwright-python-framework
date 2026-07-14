@@ -117,7 +117,7 @@ jobs:
   publish-allure-report:
     name: Publish Allure Report
     if: github.event_name == 'workflow_dispatch'
-    needs: execute-ui-tests
+    needs: execute-tests
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
