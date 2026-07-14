@@ -1,10 +1,13 @@
 import allure
+import pytest
 
 from api.client.auth_client import AuthClient
 from test_data import auth_data
 
 class TestAuth:
 
+    @pytest.mark.smoke
+    @pytest.mark.regression
     @allure.feature("Authentication")
     @allure.title("Verify token can be generated with valid credentials")
     def test_auth(self, api_context):
@@ -18,6 +21,8 @@ class TestAuth:
         assert response_body["token"]
 
 
+
+    @pytest.mark.regression
     @allure.feature("Authentication")
     @allure.title("Verify token is not generated with invalid credentials")
     def test_auth_with_invalid_credentials(self, api_context):

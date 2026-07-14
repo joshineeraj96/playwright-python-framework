@@ -1,10 +1,12 @@
 import allure
+import pytest
 
 from api.client.booking_client import BookingClient
 
 
 class TestMockBooking:
 
+    @pytest.mark.mock
     @allure.feature("WireMock")
     @allure.title("Verify booking can be fetched from WireMock")
     def test_get_booking_from_mock_server(self, mock_api_context):
