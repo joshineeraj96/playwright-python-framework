@@ -18,7 +18,11 @@ class TestAuth:
         response_body = response.json()
 
         assert "token" in response_body
-        assert response_body["token"]
+        
+        # this is to test the response time
+        # assert response.timing["responseEnd"] < 1000
+        assert isinstance(response_body["token"], str)
+        assert len(response_body["token"]) > 0
 
 
 

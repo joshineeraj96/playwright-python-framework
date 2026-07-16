@@ -75,13 +75,13 @@ class TestBooking:
     @pytest.mark.regression
     @allure.feature("Booking")
     @allure.title("Verify booking can be updated")
-    def test_update_booking(self, api_context, auth_token, created_booking):
+    def test_update_booking(self, api_context, cookie_headers, created_booking):
 
        booking_id = created_booking["bookingid"]
 
        booking_client = BookingClient(api_context)
 
-       response = booking_client.update_booking(booking_id, booking_data.UPDATE_BOOKING, auth_token)
+       response = booking_client.update_booking(booking_id, booking_data.UPDATE_BOOKING, headers=cookie_headers)
 
        assert response.status == 200
 
@@ -97,13 +97,13 @@ class TestBooking:
     @pytest.mark.regression
     @allure.feature("Booking")
     @allure.title("Verify booking can be partially updated")
-    def test_patch_booking(self, api_context, auth_token, created_booking):
+    def test_patch_booking(self, api_context, cookie_headers, created_booking):
 
        booking_id = created_booking["bookingid"]
 
        booking_client = BookingClient(api_context)
 
-       response = booking_client.patch_booking(booking_id, booking_data.PATCH_BOOKING, auth_token)
+       response = booking_client.patch_booking(booking_id, booking_data.PATCH_BOOKING, headers=cookie_headers)
 
        assert response.status == 200
 
@@ -115,15 +115,15 @@ class TestBooking:
     @pytest.mark.regression
     @allure.feature("Booking")
     @allure.title("Verify booking can be deleted")
-    def test_delete_booking(self, api_context, auth_token, created_booking):
+    def test_delete_booking(self, api_context, cookie_headers, created_booking):
 
        booking_id = created_booking["bookingid"]
 
        booking_client = BookingClient(api_context)
 
-       response = booking_client.delete_booking(booking_id, auth_token)
+       response = booking_client.delete_booking(booking_id, headers=cookie_headers)
 
-       assert response.status == 200
+       assert response.status == 201
 
 
     @pytest.mark.regression
@@ -146,7 +146,7 @@ class TestBooking:
 
        booking_client = BookingClient(api_context)
 
-       response = booking_client.update_booking(booking_id, booking_data.UPDATE_BOOKING, "")
+       response = booking_client.update_booking(booking_id, booking_data.UPDATE_BOOKING, {})
 
        assert response.status == 403
 
