@@ -1,9 +1,10 @@
 # Playwright Python Test Automation Framework
 
-A scalable and maintainable test automation framework built with Playwright, Python, and Pytest, supporting both UI and API testing.
+A production-inspired, scalable, and maintainable test automation framework built using **Playwright**, **Python**, and **Pytest** for both **UI** and **API** testing.
 
-The framework demonstrates industry-standard automation practices, including the Page Object Model, reusable API client architecture, data-driven testing, parallel execution, Allure reporting, and GitHub Actions CI/CD.
+This project demonstrates enterprise-level automation practices including **Page Object Model (POM)**, reusable API client architecture, data-driven testing, centralized browser management, configurable fixtures, robust reporting, parallel execution, and GitHub Actions CI/CD.
 
+The framework has been designed with a strong focus on **maintainability**, **reusability**, **scalability**, and **clean architecture**, making it suitable for modern web application testing and showcasing enterprise automation engineering practices and scalable framework design.
 
 ---
 
@@ -50,22 +51,70 @@ The framework demonstrates industry-standard automation practices, including the
 ## 🏗️ Framework Architecture
 
 ```text
-                    Tests
-                      │
-      ┌───────────────┴───────────────┐
-      ▼                               ▼
-Page Objects                  API Clients
-      │                               │
-      └───────────────┬───────────────┘
-                      ▼
-              Pytest Fixtures
-                      │
-          Browser / API Context
-                      │
-                 Playwright
+                                   Tests
+        UI                 API
+         │                  │
+         ▼                  ▼
+   Page Objects       API Clients
+         │                  │
+         └──────┬───────────┘
+                ▼
+        Pytest Fixtures
+                │
+      Browser / API Context
+                │
+          Playwright Engine
+                │
+    Allure | Logs | Screenshots
+                │
+        GitHub Actions CI
 ```
 
-The framework follows a layered architecture where UI tests interact with Page Objects while API tests interact with reusable API Clients. Both layers leverage shared Pytest fixtures and Playwright for efficient, maintainable, and scalable test automation.
+The framework follows a layered architecture that separates concerns between test logic, business actions, infrastructure, and reporting.
+
+- UI tests interact only with Page Objects.
+- API tests communicate through reusable API Clients.
+- Fixtures manage browser, API context, authentication, and resource lifecycle.
+- Configuration and environment management remain centralized.
+- Reporting, screenshots, traces, and logs are automatically generated during execution.
+
+This separation improves readability, simplifies maintenance, and allows the framework to scale as additional modules and test suites are introduced.
+
+
+---
+
+## ⭐ Framework Highlights
+
+✔ Enterprise-style folder structure
+
+✔ UI & API Automation in a single framework
+
+✔ Reusable Page Object Model
+
+✔ Generic API Client Architecture
+
+✔ Browser Context Isolation
+
+✔ Parallel Test Execution
+
+✔ Cross Browser Testing
+
+✔ Automatic Screenshot & Trace Capture
+
+✔ JSON Schema Validation
+
+✔ WireMock Integration
+
+✔ GitHub Actions CI/CD
+
+✔ Allure Reporting
+
+✔ Environment Variable Management
+
+✔ Data-Driven Testing
+
+✔ Scalable and Maintainable Design
+
 
 ---
 
@@ -96,17 +145,14 @@ playwright-python-framework/
 
 This framework follows several design principles commonly adopted in enterprise automation projects.
 
-- Page Object Model to improve maintainability and reduce code duplication.
-- Session-scoped browser to reduce execution time.
-- Function-scoped browser context for complete test isolation.
-- Environment variables for sensitive credentials.
-- JSON-based data-driven testing for better separation of test data and test logic.
-- Pytest fixtures for resource lifecycle management.
-- Failure-only screenshots and Playwright traces for efficient debugging.
-- GitHub Actions for automated CI execution.
-- Generic API client to promote code reuse and maintainability.
-- Authentication handled through reusable fixtures to support multiple authentication mechanisms.
-
+- Session-scoped browser to minimize browser startup overhead and improve execution speed.
+- Function-scoped browser contexts to ensure complete isolation between test cases and eliminate shared state.
+- Generic API client to reduce duplicated request logic and simplify the addition of new endpoints.
+- Environment variables for secure credential management and easier deployment across environments.
+- JSON-based test data to separate test logic from test data and improve maintainability.
+- Pytest fixtures to manage test dependencies and resource lifecycle.
+- Automatic screenshots and Playwright traces only on failures to simplify debugging while minimizing storage.
+- GitHub Actions to enable automated execution and continuous validation on every code change.
 
 ---
 
@@ -115,7 +161,7 @@ This framework follows several design principles commonly adopted in enterprise 
 Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/playwright-python-framework.git
+git clone https://github.com/joshineeraj96/playwright-python-framework.git
 cd playwright-python-framework
 ```
 
@@ -295,4 +341,12 @@ This project is licensed under the MIT License.
 
 **Neeraj Joshi**
 
-Senior SDET | Playwright | Python | API Automation | AI Testing
+Senior SDET | Automation Test Engineer
+
+Specializing in Playwright, Python, API Automation, and AI Testing.
+
+GitHub:
+https://github.com/joshineeraj96
+
+LinkedIn:
+https://www.linkedin.com/in/neeraj-joshi-60855b99
