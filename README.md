@@ -1,8 +1,9 @@
-# Playwright Python Automation Framework
+# Playwright Python Test Automation Framework
 
-A production-ready UI automation framework built with Playwright, Python, and Pytest.
+A scalable and maintainable test automation framework built with Playwright, Python, and Pytest, supporting both UI and API testing.
 
-The framework demonstrates modern automation engineering practices including scalable architecture, data-driven testing, parallel execution, CI/CD integration, and maintainable test design commonly adopted in enterprise projects.
+The framework demonstrates industry-standard automation practices, including the Page Object Model, reusable API client architecture, data-driven testing, parallel execution, Allure reporting, and GitHub Actions CI/CD.
+
 
 ---
 
@@ -14,13 +15,21 @@ The framework demonstrates modern automation engineering practices including sca
 - Allure Reporting
 - Pytest-xdist (Parallel Execution)
 - Pytest-rerunfailures
+- Faker
+- JSON Schema Validation
+- WireMock
 - GitHub Actions
 
 ---
 
 ## ✨ Framework Features
 
-- Page Object Model (POM)
+- UI Automation using Page Object Model (POM)
+- API Automation using Playwright APIRequestContext
+- Reusable API Client Architecture
+- Reusable Authentication Fixtures
+- JSON Schema Validation
+- WireMock Integration
 - Centralized Browser Management
 - Session & Function Scoped Pytest Fixtures
 - Cross Browser Support
@@ -41,22 +50,22 @@ The framework demonstrates modern automation engineering practices including sca
 ## 🏗️ Framework Architecture
 
 ```text
-Tests
-   │
-   ▼
-Page Objects
-   │
-   ▼
-Browser / Context / Page Fixtures
-   │
-   ▼
-Browser Manager
-   │
-   ▼
-Playwright
+                    Tests
+                      │
+      ┌───────────────┴───────────────┐
+      ▼                               ▼
+Page Objects                  API Clients
+      │                               │
+      └───────────────┬───────────────┘
+                      ▼
+              Pytest Fixtures
+                      │
+          Browser / API Context
+                      │
+                 Playwright
 ```
 
-The framework follows a layered architecture where test cases interact with Page Objects, which in turn use shared browser fixtures and the Browser Manager to communicate with Playwright.
+The framework follows a layered architecture where UI tests interact with Page Objects while API tests interact with reusable API Clients. Both layers leverage shared Pytest fixtures and Playwright for efficient, maintainable, and scalable test automation.
 
 ---
 
@@ -65,7 +74,7 @@ The framework follows a layered architecture where test cases interact with Page
 ```text
 playwright-python-framework/
 │
-├── artifacts/
+├── api/
 ├── config/
 ├── core/
 ├── pages/
@@ -87,7 +96,7 @@ playwright-python-framework/
 
 This framework follows several design principles commonly adopted in enterprise automation projects.
 
-- Page Object Model to separate UI interactions from test logic.
+- Page Object Model to improve maintainability and reduce code duplication.
 - Session-scoped browser to reduce execution time.
 - Function-scoped browser context for complete test isolation.
 - Environment variables for sensitive credentials.
@@ -95,6 +104,9 @@ This framework follows several design principles commonly adopted in enterprise 
 - Pytest fixtures for resource lifecycle management.
 - Failure-only screenshots and Playwright traces for efficient debugging.
 - GitHub Actions for automated CI execution.
+- Generic API client to promote code reuse and maintainability.
+- Authentication handled through reusable fixtures to support multiple authentication mechanisms.
+
 
 ---
 
@@ -103,7 +115,7 @@ This framework follows several design principles commonly adopted in enterprise 
 Clone the repository:
 
 ```bash
-git clone git clone https://github.com/your-username/playwright-python-framework.git
+git clone https://github.com/your-username/playwright-python-framework.git
 cd playwright-python-framework
 ```
 
@@ -156,7 +168,7 @@ ORANGEHRM_USERNAME=your_username
 ORANGEHRM_PASSWORD=your_password
 ```
 
-Sensitive credentials should never be committed to source control.
+Additional environment variables can be added as required for different environments.
 
 ---
 
@@ -166,6 +178,16 @@ Sensitive credentials should never be committed to source control.
 
 ```bash
 pytest
+```
+
+# Run only API tests
+```bash
+pytest tests/api
+```
+
+# Run only UI tests
+```bash
+pytest tests/ui
 ```
 
 ### Run in Headed Mode
@@ -243,27 +265,25 @@ artifacts/
 
 ## 📈 Current Coverage
 
-- Login Module
-- Logout Module
-- Dashboard Module
-- Admin Module
+### UI Automation
+
+- Login
+- Logout
+- Dashboard
+- Admin
+
+### API Automation
+
+- Authentication
+- Booking CRUD Operations
+- JSON Schema Validation
+- Mock API Testing (WireMock)
+- Positive & Negative API Test Scenarios
 
 The framework is designed to scale by simply adding new Page Objects and test modules.
 
 ---
 
-## 🚧 Roadmap
-
-- [x] UI Automation Framework
-- [x] JSON Data-Driven Testing
-- [x] Parameterization
-- [x] Test Markers
-- [x] GitHub Actions CI/CD
-- [ ] API Automation Integration
-- [ ] Unified UI + API Framework
-- [ ] Docker Support
-
----
 
 ## 📄 License
 
@@ -275,6 +295,4 @@ This project is licensed under the MIT License.
 
 **Neeraj Joshi**
 
-Senior Automation Test Engineer
-
-Python | Playwright | API Automation | AI Testing
+Senior SDET | Playwright | Python | API Automation | AI Testing
